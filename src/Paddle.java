@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Paddle {
-    int topX, topY, height, width;
+    private int topX, topY, height, width;
     JFrame frame;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     private GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();

@@ -21,7 +21,7 @@ public class PongBall {
     public PongBall(int startPositionX, int startPositionY) {
         this.size = 20;
         this.speed = defaultSpeed;
-        this.directionX = 1;
+        this.directionX = -1;
         this.directionY = 1;
         this.xPosition = startPositionX;
         this.yPosition = startPositionY;
@@ -47,12 +47,26 @@ public class PongBall {
         return yPosition <= 0 || yPosition + size >= screenSize.height - insets.bottom;
     }
 
-    private boolean hitsPaddle(Paddle paddle) {
-        return !(paddle.getTopX() + paddle.getWidth() < xPosition ||
-                xPosition + size < paddle.getTopX() ||
-                paddle.getTopY() + paddle.getHeight() < yPosition ||
-                paddle.getTopY() + paddle.getHeight() < paddle.getTopY());
+//    private boolean hitsPaddle(Paddle paddle) {
+//        return !(paddle.getTopX() + paddle.getWidth() < xPosition ||
+//                xPosition + size < paddle.getTopX() ||
+//                paddle.getTopY() + paddle.getHeight() < yPosition ||
+//                paddle.getTopY() + paddle.getHeight() < paddle.getTopY());
+//
+//    }
 
+    private boolean hitsRightPaddle(Paddle rightPaddle) {
+        return rightPaddle.getTopX() <= xPosition + size
+                && rightPaddle.getTopX() + rightPaddle.getWidth() > xPosition + size
+                && rightPaddle.getTopY() <= yPosition + size
+                && rightPaddle.getTopY() + rightPaddle.getHeight() >= yPosition;
+    }
+
+    private boolean hitsLeftPaddle(Paddle leftPaddle) {
+        return leftPaddle.getTopX() + leftPaddle.getWidth() >= xPosition
+                && leftPaddle.getTopX() <= xPosition
+                && leftPaddle.getTopY() <= yPosition + size
+                && leftPaddle.getTopY() + leftPaddle.getHeight() >= yPosition;
     }
 
     private void bounceHorizontally() {
@@ -87,10 +101,10 @@ public class PongBall {
         if (hitsTopOrBottom()) {
             bounceVertically();
         }
-        if (hitsPaddle(leftPaddle)) {
+        if (hitsLeftPaddle(leftPaddle)) {
             bounceHorizontally();
         }
-        if (hitsPaddle(rightPaddle)) {
+        if (hitsRightPaddle(rightPaddle)) {
             bounceHorizontally();
         }
     }
