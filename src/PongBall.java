@@ -5,10 +5,10 @@ public class PongBall {
     private JFrame frame;
     private int xPosition;
     private int yPosition;
-    private int directionX;
-    private int directionY;
+    private double directionX;
+    private double directionY;
     private final int size;
-    private final int defaultSpeed = 500;
+    private final int defaultSpeed = 700;
     private double speed;
 
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,6 +34,34 @@ public class PongBall {
         frame.setVisible(true);
     }
 
+    public int getScreenWidth() {
+        return screenSize.width;
+    }
+
+    public int getScreenHeight() {
+        return screenSize.height - insets.bottom;
+    }
+
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
+    }
+
+    public double getDirectionX() {
+        return directionX;
+    }
+
+    public double getDirectionY() {
+        return directionY;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
     private boolean hitsLeft() {
         return xPosition <= 0;
     }
@@ -46,14 +74,6 @@ public class PongBall {
     private boolean hitsTopOrBottom() {
         return yPosition <= 0 || yPosition + size >= screenSize.height - insets.bottom;
     }
-
-//    private boolean hitsPaddle(Paddle paddle) {
-//        return !(paddle.getTopX() + paddle.getWidth() < xPosition ||
-//                xPosition + size < paddle.getTopX() ||
-//                paddle.getTopY() + paddle.getHeight() < yPosition ||
-//                paddle.getTopY() + paddle.getHeight() < paddle.getTopY());
-//
-//    }
 
     private boolean hitsRightPaddle(Paddle rightPaddle) {
         return rightPaddle.getTopX() <= xPosition + size
@@ -77,34 +97,38 @@ public class PongBall {
         directionY *= -1;
     }
 
-    private void respawn() {
+    private void respawn(Enemy rightPaddle) {
         xPosition = screenSize.width / 2;
         yPosition = 50;
         speed = defaultSpeed;
+        rightPaddle.calculateCollisionPoint(this);
     }
 
     public void increaseSpeed() {
-        speed *= 1.5;
+        speed += 25;
     }
 
-    public void move(double deltaTime, Paddle leftPaddle, Paddle rightPaddle, Score score) {
+    public void move(double deltaTime, Paddle leftPaddle, Enemy rightPaddle, Score score) {
         xPosition += (int) (directionX * speed * deltaTime);
         yPosition += (int) (directionY * speed * deltaTime);
         if (hitsLeft()) {
-            respawn();
+            respawn(rightPaddle);
             score.increaseRightScore();
         }
         if (hitsRight()) {
-            respawn();
+            respawn(rightPaddle);
             score.increaseLeftScore();
         }
         if (hitsTopOrBottom()) {
             bounceVertically();
         }
         if (hitsLeftPaddle(leftPaddle)) {
+            increaseSpeed();
             bounceHorizontally();
+            rightPaddle.calculateCollisionPoint(this);
         }
         if (hitsRightPaddle(rightPaddle)) {
+            increaseSpeed();
             bounceHorizontally();
         }
     }

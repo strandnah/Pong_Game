@@ -1,32 +1,27 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.security.Key;
 
 public class PongGame extends GraphicsApplication {
     private PongBall ball;
-    private Paddle leftPaddle, rightPaddle;
+    private Paddle leftPaddle;
+    private Enemy rightPaddle;
     private Score score;
     private Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    private double elapsedTime;
-    private final int netxLevelThreshold = 5; // value in seconds
 
 
     public PongGame() {
         ball = new PongBall(screenSize.width / 2, 50);
         leftPaddle = new Paddle(40, 50, screenSize.height * 0.25, 20);
-        rightPaddle = new Paddle(screenSize.width - 40, 50, screenSize.height * 0.25, 20);
+        rightPaddle = new Enemy(screenSize.width - 40, 50, screenSize.height * 0.25, 20);
         score = new Score();
-        elapsedTime = 0;
     }
 
     @Override
     public void update(double deltaTime) {
-        elapsedTime += deltaTime;
-        if (elapsedTime > netxLevelThreshold) {
-            ball.increaseSpeed();
-            elapsedTime = 0;
-        }
         ball.move(deltaTime, leftPaddle, rightPaddle, score);
+        rightPaddle.move(deltaTime);
     }
 
     @Override

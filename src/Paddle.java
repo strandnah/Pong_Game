@@ -32,6 +32,14 @@ public class Paddle {
         return topY;
     }
 
+    public void setTopX(int topX) {
+        this.topX = topX;
+    }
+
+    public void setTopY(int topY) {
+        this.topY = topY;
+    }
+
     public int getHeight() {
         return height;
     }
