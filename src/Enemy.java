@@ -1,5 +1,3 @@
-import java.awt.*;
-
 public class Enemy extends Paddle {
     private int yPointToMove;
     private int enemySpeed = 250;

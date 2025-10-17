@@ -1,7 +1,5 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.security.Key;
 
 public class PongGame extends GraphicsApplication {
     private PongBall ball;
